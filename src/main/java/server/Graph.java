@@ -29,16 +29,28 @@ public class Graph {
         }
     }
 
-    private void addEdge(int u, int v) {
+    protected void addEdge(int u, int v) {
         noOfEdges += adjList.computeIfAbsent(u, k -> new HashSet<>()).add(v) ? 1 : 0;
         nodes.add(u);
         nodes.add(v);
     }
 
-    private void removeEdge(int u, int v) {
+    protected void removeEdge(int u, int v) {
         if (adjList.containsKey(u))
             noOfEdges += adjList.get(u).remove(v) ? -1 : 0;
         nodes.remove(u);
         nodes.remove(v);
+    }
+
+    protected boolean containsNode(int node) {
+        return nodes.contains(node);
+    }
+
+    protected int getNoOfNodes() {
+        return nodes.size();
+    }
+
+    protected Set<Integer> getNeighbors(int node) {
+        return adjList.get(node);
     }
 }
