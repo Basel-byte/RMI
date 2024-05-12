@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.concurrent.*;
+
 public class RequestHandler {
     class BFS_C implements Runnable {
         private BFS bfs;
@@ -29,19 +31,19 @@ public class RequestHandler {
         }
     }
 
-    private Graph graph;
-    private BFS bfs;
+    private static Graph graph;
+    private static BFS bfs;
     private int num_queires;
 
     public RequestHandler(Graph graph) {
         this.graph = graph;
         this.bfs = new BFS(this.graph);
-        this.num_queires = 0;
     }
 
-    public int[] computeBatch(ArrayList<String[]> reqSeq, int num_queires) throws InterruptedException {
-        int[] results = new int[num_queires];
-        Thread[] thread = new Thread[num_queires];
+    public int[] computeBatch(ArrayList<String[]> reqSeq) throws InterruptedException {
+        int num_req = reqSeq.size();
+        int[] results = new int[num_req];
+        Thread[] thread = new Thread[num_req];
         int i=0;
         int start_join_idx = 0;
 
@@ -72,6 +74,12 @@ public class RequestHandler {
             thread[j].join();
 
         }
-        return results;
+
+        // Create a new array to store the final results
+        int[] finalResults = new int[i];
+        System.arraycopy(results, 0, finalResults, 0, i);
+
+        return finalResults;
     }
+
 }
