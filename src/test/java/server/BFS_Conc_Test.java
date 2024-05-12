@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-class BFS_C_Test {
+class BFS_Conc_Test {
     private static Graph graph;
     private static RequestHandler requestHandler;
     private static Parser parser;
@@ -20,24 +20,18 @@ class BFS_C_Test {
     @Test
     void batch1Test() throws InterruptedException {
         ArrayList<String[]> reqSeq = parser.prepareRequests("input/batch1");
-        long start = System.nanoTime();
-        assertArrayEquals(new int[]{2, 3, -1}, requestHandler.computeBatch(reqSeq));
-        System.out.println("Conccurent: Time taken by test 1 in Nano sec is "+(System.nanoTime()-start));
+        assertArrayEquals(new int[]{2, 3, -1}, requestHandler.computeBatchConc(reqSeq));
     }
 
     @Test
     void batch2Test() throws InterruptedException {
         ArrayList<String[]> reqSeq = parser.prepareRequests("input/batch2");
-        long start = System.nanoTime();
-        assertArrayEquals(new int[]{2, 4}, requestHandler.computeBatch(reqSeq));
-        System.out.println("Conccurent: Time taken by test 2 in Nano sec is "+(System.nanoTime()-start));
+        assertArrayEquals(new int[]{2, 4}, requestHandler.computeBatchConc(reqSeq));
     }
 
     @Test
     void batch3Test() throws InterruptedException {
         ArrayList<String[]> reqSeq = parser.prepareRequests("input/batch3");
-        long start = System.nanoTime();
-        assertArrayEquals(new int[]{1, 2, 2, 3, 4}, requestHandler.computeBatch(reqSeq));
-        System.out.println("Conccurent: Time taken by test 3 in Nano sec is "+(System.nanoTime()-start));
+        assertArrayEquals(new int[]{1, 2, 2, 3, 4}, requestHandler.computeBatchConc(reqSeq));
     }
 }
