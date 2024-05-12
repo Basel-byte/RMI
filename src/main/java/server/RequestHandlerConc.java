@@ -1,14 +1,8 @@
 package server;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.*;
 
-public class RequestHandler {
+public class RequestHandlerConc implements RequestHandlerI {
     class BFS_C implements Runnable {
         private BFS bfs;
         private int s;
@@ -33,14 +27,13 @@ public class RequestHandler {
 
     private static Graph graph;
     private static BFS bfs;
-    private int num_queires;
 
-    public RequestHandler(Graph graph) {
+    public RequestHandlerConc(Graph graph) {
         this.graph = graph;
         this.bfs = new BFS(this.graph);
     }
 
-    public int[] computeBatchConc(ArrayList<String[]> reqSeq) throws InterruptedException {
+    public int[] computeBatch(ArrayList<String[]> reqSeq) throws InterruptedException {
         long start = System.nanoTime();
 
         int num_req = reqSeq.size();
@@ -84,34 +77,4 @@ public class RequestHandler {
 
         return finalResults;
     }
-
-    public int[] computeBatchSeq(ArrayList<String[]> reqSeq) {
-        long start = System.nanoTime();
-
-        int num_req = reqSeq.size();
-        int[] results = new int[num_req];
-        int i=0;
-
-        for(String[] req : reqSeq){
-            if (req[0].equals("Q")){
-                results[i] = this.bfs.computeShortestPath(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
-                i++;
-
-            }else if(req[0].equals("A")){
-                this.graph.addEdge(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
-
-            }else if(req[0].equals("D")){
-                this.graph.deleteEdge(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
-
-            }
-        }
-
-        // Create a new array to store the final results
-        int[] finalResults = new int[i];
-        System.arraycopy(results, 0, finalResults, 0, i);
-        System.out.println("Sequential: Time taken in Nano sec is "+(System.nanoTime()-start));
-
-        return finalResults;
-    }
-
 }
