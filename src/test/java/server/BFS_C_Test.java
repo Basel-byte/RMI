@@ -18,24 +18,24 @@ class BFS_C_Test {
     @Test
     void batch1Test() throws InterruptedException {
         ArrayList<String[]> reqSeq = requestHandler.prepareRequests("input/batch1");
-        long start = System.currentTimeMillis();
+        long start = System.nanoTime();
         assertArrayEquals(new int[]{2, 3, -1}, requestHandler.computeBatch(reqSeq));
-        System.out.println("Time taken by test 1 is "+(System.currentTimeMillis()-start));
+        System.out.println("Conccurent: Time taken by test 1 in Nano sec is "+(System.nanoTime()-start));
     }
 
     @Test
     void batch2Test() throws InterruptedException {
         ArrayList<String[]> reqSeq = requestHandler.prepareRequests("input/batch2");
-        long start = System.currentTimeMillis();
+        long start = System.nanoTime();
         assertArrayEquals(new int[]{2, 4}, requestHandler.computeBatch(reqSeq));
-        System.out.println("Time taken by test 2 is "+(System.currentTimeMillis()-start));
+        System.out.println("Conccurent: Time taken by test 2 in Nano sec is "+(System.nanoTime()-start));
     }
 
     @Test
     void batch3Test() throws InterruptedException {
         ArrayList<String[]> reqSeq = requestHandler.prepareRequests("input/batch3");
-        long start = System.currentTimeMillis();
+        long start = System.nanoTime();
         assertArrayEquals(new int[]{1, 2, 2, 3, 4}, requestHandler.computeBatch(reqSeq));
-        System.out.println("Time taken by test 3 is "+(System.currentTimeMillis()-start));
+        System.out.println("Conccurent: Time taken by test 3 in Nano sec is "+(System.nanoTime()-start));
     }
 }
