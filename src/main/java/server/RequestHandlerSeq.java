@@ -1,6 +1,6 @@
 package server;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class RequestHandlerSeq extends RequestHandler {
 
@@ -9,7 +9,7 @@ public class RequestHandlerSeq extends RequestHandler {
     }
 
     @Override
-    public int[] computeBatch(ArrayList<String[]> reqSeq) {
+    public int[] computeBatch(List<String[]> reqSeq) {
         long start = System.nanoTime();
 
         int num_req = reqSeq.size();

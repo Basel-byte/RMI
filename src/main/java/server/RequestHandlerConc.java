@@ -1,6 +1,7 @@
 package server;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class RequestHandlerConc extends RequestHandler {
     static class BFS_C implements Runnable {
@@ -30,7 +31,7 @@ public class RequestHandlerConc extends RequestHandler {
     }
 
     @Override
-    public int[] computeBatch(ArrayList<String[]> reqSeq) throws InterruptedException {
+    public int[] computeBatch(List<String[]> reqSeq) throws InterruptedException {
         long start = System.nanoTime();
 
         int num_req = reqSeq.size();

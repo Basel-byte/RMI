@@ -1,5 +1,7 @@
 package rmi;
 
+import java.util.List;
+
 public interface GraphIF extends java.rmi.Remote {
-    String[] batchRequest(String[] batch) throws java.rmi.RemoteException;
+    int[] batchRequest(List<String> batch) throws java.rmi.RemoteException, InterruptedException;
 }

@@ -9,7 +9,9 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 public class RMIClient {
@@ -29,13 +31,13 @@ public class RMIClient {
             GraphIF graph = (GraphIF) registry.lookup(remoteObjectName);
 
             // Generate a test batch
-            String[] batch = {"Q 1 3", "A 4 5", "Q 1 5", "Q 5 1", "F"};
+            List<String> batch = List.of("Q 1 3", "A 4 5", "Q 1 5", "Q 5 1", "F");
 
-            String[] result = graph.batchRequest(batch);
-
-            System.out.println("Sent: " + Arrays.toString(result));
+            System.out.println("Sent: " + batch);
+            int[] result = graph.batchRequest(batch);
+            System.out.println("Received: " + Arrays.toString(result));
         }
-        catch (NotBoundException | IOException e) {
+        catch (NotBoundException | IOException | InterruptedException e) {
             throw new RuntimeException(e);
         }
     }
