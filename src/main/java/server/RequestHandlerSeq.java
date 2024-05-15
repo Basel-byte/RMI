@@ -9,11 +9,10 @@ public class RequestHandlerSeq extends RequestHandler {
     }
 
     @Override
-    public int[] computeBatch(List<String[]> reqSeq) {
+    public int[] computeBatch(List<String[]> reqSeq, int numQueries) {
         long start = System.nanoTime();
 
-        int num_req = reqSeq.size();
-        int[] results = new int[num_req];
+        int[] results = new int[numQueries];
         int i=0;
 
         for(String[] req : reqSeq){
@@ -27,12 +26,9 @@ public class RequestHandlerSeq extends RequestHandler {
             }
         }
 
-        // Create a new array to store the final results
-        int[] finalResults = new int[i];
-        System.arraycopy(results, 0, finalResults, 0, i);
         System.out.println("Sequential: Time taken in Nano sec is "+(System.nanoTime()-start));
 
-        return finalResults;
+        return results;
     }
 
 }

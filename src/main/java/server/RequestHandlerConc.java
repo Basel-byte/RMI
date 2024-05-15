@@ -31,11 +31,11 @@ public class RequestHandlerConc extends RequestHandler {
     }
 
     @Override
-    public int[] computeBatch(List<String[]> reqSeq) throws InterruptedException {
+    public int[] computeBatch(List<String[]> reqSeq, int numQueries) throws InterruptedException {
         long start = System.nanoTime();
 
         int num_req = reqSeq.size();
-        int[] results = new int[num_req];
+        int[] results = new int[numQueries];
         Thread[] thread = new Thread[num_req];
         int i=0;
         int start_join_idx = 0;
@@ -69,11 +69,8 @@ public class RequestHandlerConc extends RequestHandler {
 
         }
 
-        // Create a new array to store the final results
-        int[] finalResults = new int[i];
-        System.arraycopy(results, 0, finalResults, 0, i);
         System.out.println("Concurrent: Time taken in Nano sec is "+(System.nanoTime()-start));
 
-        return finalResults;
+        return results;
     }
 }

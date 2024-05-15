@@ -1,7 +1,6 @@
 package rmi;
 
 import server.Graph;
-import server.Parser;
 import server.RequestHandler;
 import server.RequestHandlerSeq;
 
@@ -13,19 +12,17 @@ public class GraphObject extends UnicastRemoteObject implements GraphIF {
 
     Graph graph;
     RequestHandler requestHandler;
-    Parser parser;
     public GraphObject() throws java.rmi.RemoteException {
         super();
         graph = new Graph();
         requestHandler = new RequestHandlerSeq(graph);
-        parser = new Parser();
     }
 
     @Override
-    public int[] batchRequest(List<String> batch) throws java.rmi.RemoteException, InterruptedException {
-        // TODO: implement method
-        System.out.println("Received: " + batch.toString());
-        int[] result = requestHandler.computeBatch(parser.prepareRequests(batch));
+    public int[] batchRequest(List<String[]> batch, int noQueries) throws java.rmi.RemoteException, InterruptedException {
+        System.out.println("Received: ");
+        batch.forEach((r) -> System.out.println(Arrays.toString(r)));
+        int[] result = requestHandler.computeBatch(batch, noQueries);
         System.out.println("Sent: " + Arrays.toString(result));
         return result;
     }

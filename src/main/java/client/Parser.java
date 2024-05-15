@@ -1,41 +1,38 @@
-package server;
+package client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 public class Parser {
-    private int num_queries;
 
-    public Parser() {
-        this.num_queries = 0;
+    private static int numQueries = 0;
+
+
+    public static int getNumQueries() {
+        return numQueries;
     }
 
-    public int getNum_queries() {
-        return num_queries;
+    private static void resetNumQueries(){
+        numQueries = 0;
     }
-
-    public void reset_num_q(){
-        this.num_queries = 0;
-    }
-
-    public List<String[]> prepareRequests(String requestsPath){
-        ClassLoader classLoader = getClass().getClassLoader();
+    public static List<String[]> prepareRequests(String requestsPath) {
+        resetNumQueries();
+        ClassLoader classLoader = Parser.class.getClassLoader();
         InputStream inputStream = classLoader.getResourceAsStream(requestsPath);
 
-        ArrayList<String[]> reqSeq = new ArrayList<String[]>();
+        List<String[]> reqSeq = new ArrayList<>();
 
         if (inputStream != null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 String line;
                 while ((line = reader.readLine()) != null && !line.equals("F")) {
                     String[] req = line.split(" ");
-                    if (req[0].equals("Q")) this.num_queries++;
+                    if (req[0].equals("Q")) numQueries++;
                     reqSeq.add(req);
                 }
             } catch (IOException e) {
@@ -46,13 +43,15 @@ public class Parser {
         }
         return reqSeq;
     }
-    public List<String[]> prepareRequests(List<String> batch){
+
+    public static List<String[]> prepareRequests(List<String> batch) {
+        resetNumQueries();
         List<String[]> reqSeq = new ArrayList<>();
         Iterator<String> it = batch.iterator();
         String line;
         while (it.hasNext() && !(line = it.next()).equals("F")) {
             String[] req = line.split(" ");
-            if (req[0].equals("Q")) this.num_queries++;
+            if (req[0].equals("Q")) numQueries++;
             reqSeq.add(req);
         }
         return reqSeq;
