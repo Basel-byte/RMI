@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 class BFS_Conc_Test {
     private static Graph graph;
-    private static RequestHandlerI requestHandler;
+    private static RequestHandler requestHandler;
     private static Parser parser;
     @BeforeAll
     static void beforeAll() {

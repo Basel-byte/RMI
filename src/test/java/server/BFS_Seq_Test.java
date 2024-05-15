@@ -8,12 +8,11 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class BFS_Seq_Test {
-    private static Graph graph;
-    private static RequestHandlerI requestHandler;
+    private static RequestHandler requestHandler;
     private static Parser parser;
     @BeforeAll
     static void beforeAll() {
-        graph = new Graph();
+        Graph graph = new Graph();
         requestHandler = new RequestHandlerSeq(graph);
         parser = new Parser();
     }

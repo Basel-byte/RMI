@@ -2,13 +2,13 @@ package server;
 
 import java.util.ArrayList;
 
-public class RequestHandlerConc implements RequestHandlerI {
-    class BFS_C implements Runnable {
-        private BFS bfs;
-        private int s;
-        private int t;
-        private int[] results;
-        private int res_idx;
+public class RequestHandlerConc extends RequestHandler {
+    static class BFS_C implements Runnable {
+        private final BFS bfs;
+        private final int s;
+        private final int t;
+        private final int[] results;
+        private final int res_idx;
 
         public BFS_C(BFS bfs, int s, int t, int[] results, int res_idx) {
             this.bfs = bfs;
@@ -25,14 +25,11 @@ public class RequestHandlerConc implements RequestHandlerI {
         }
     }
 
-    private static Graph graph;
-    private static BFS bfs;
-
     public RequestHandlerConc(Graph graph) {
-        this.graph = graph;
-        this.bfs = new BFS(this.graph);
+        super(graph);
     }
 
+    @Override
     public int[] computeBatch(ArrayList<String[]> reqSeq) throws InterruptedException {
         long start = System.nanoTime();
 
@@ -43,25 +40,26 @@ public class RequestHandlerConc implements RequestHandlerI {
         int start_join_idx = 0;
 
         for(String[] req : reqSeq){
-            if (req[0].equals("Q")){
-                thread[i] = new Thread(new BFS_C(this.bfs, Integer.parseInt(req[1]), Integer.parseInt(req[2]), results, i));
-                thread[i].start();
-                i++;
-
-            }else if(req[0].equals("A")){
-                for(int j=start_join_idx; j<i; j++){
-                    thread[j].join();
+            switch (req[0]) {
+                case "Q" -> {
+                    thread[i] = new Thread(new BFS_C(bfs, Integer.parseInt(req[1]), Integer.parseInt(req[2]), results, i));
+                    thread[i].start();
+                    i++;
                 }
-                start_join_idx = i;
-                this.graph.addEdge(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
-
-            }else if(req[0].equals("D")){
-                for(int j=start_join_idx; j<i; j++){
-                    thread[j].join();
+                case "A" -> {
+                    for (int j = start_join_idx; j < i; j++) {
+                        thread[j].join();
+                    }
+                    start_join_idx = i;
+                    graph.addEdge(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
                 }
-                start_join_idx = i;
-                this.graph.deleteEdge(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
-
+                case "D" -> {
+                    for (int j = start_join_idx; j < i; j++) {
+                        thread[j].join();
+                    }
+                    start_join_idx = i;
+                    graph.deleteEdge(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
+                }
             }
         }
 
@@ -73,7 +71,7 @@ public class RequestHandlerConc implements RequestHandlerI {
         // Create a new array to store the final results
         int[] finalResults = new int[i];
         System.arraycopy(results, 0, finalResults, 0, i);
-        System.out.println("Conccurent: Time taken in Nano sec is "+(System.nanoTime()-start));
+        System.out.println("Concurrent: Time taken in Nano sec is "+(System.nanoTime()-start));
 
         return finalResults;
     }

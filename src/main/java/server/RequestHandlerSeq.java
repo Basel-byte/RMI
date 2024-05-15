@@ -2,15 +2,13 @@ package server;
 
 import java.util.ArrayList;
 
-public class RequestHandlerSeq implements RequestHandlerI {
-    private static Graph graph;
-    private static BFS bfs;
+public class RequestHandlerSeq extends RequestHandler {
 
     public RequestHandlerSeq(Graph graph) {
-        this.graph = graph;
-        this.bfs = new BFS(this.graph);
+        super(graph);
     }
 
+    @Override
     public int[] computeBatch(ArrayList<String[]> reqSeq) {
         long start = System.nanoTime();
 
@@ -19,16 +17,13 @@ public class RequestHandlerSeq implements RequestHandlerI {
         int i=0;
 
         for(String[] req : reqSeq){
-            if (req[0].equals("Q")){
-                results[i] = this.bfs.computeShortestPath(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
-                i++;
-
-            }else if(req[0].equals("A")){
-                this.graph.addEdge(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
-
-            }else if(req[0].equals("D")){
-                this.graph.deleteEdge(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
-
+            switch (req[0]) {
+                case "Q" -> {
+                    results[i] = bfs.computeShortestPath(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
+                    i++;
+                }
+                case "A" -> graph.addEdge(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
+                case "D" -> graph.deleteEdge(Integer.parseInt(req[1]), Integer.parseInt(req[2]));
             }
         }
 
