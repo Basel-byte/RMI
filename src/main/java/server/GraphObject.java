@@ -1,8 +1,4 @@
-package rmi;
-
-import server.Graph;
-import server.RequestHandler;
-import server.RequestHandlerSeq;
+package server;
 
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
@@ -12,17 +8,19 @@ public class GraphObject extends UnicastRemoteObject implements GraphIF {
 
     Graph graph;
     RequestHandler requestHandler;
-    public GraphObject() throws java.rmi.RemoteException {
+    public GraphObject(Boolean concurrent) throws java.rmi.RemoteException {
         super();
         graph = new Graph();
-        requestHandler = new RequestHandlerSeq(graph);
+        requestHandler = concurrent ? new RequestHandlerConcurrent(graph) : new RequestHandlerSequential(graph);
     }
 
     @Override
     public int[] batchRequest(List<String[]> batch, int noQueries) throws java.rmi.RemoteException, InterruptedException {
         System.out.println("Received: ");
         batch.forEach((r) -> System.out.println(Arrays.toString(r)));
+
         int[] result = requestHandler.computeBatch(batch, noQueries);
+
         System.out.println("Sent: " + Arrays.toString(result));
         return result;
     }

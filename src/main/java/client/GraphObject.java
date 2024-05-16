@@ -1,6 +1,6 @@
 package client;
 
-import rmi.GraphIF;
+import server.GraphIF;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;

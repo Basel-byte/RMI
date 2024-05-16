@@ -1,9 +1,8 @@
 package server;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class RequestHandlerConc extends RequestHandler {
+public class RequestHandlerConcurrent extends RequestHandler {
     static class BFS_C implements Runnable {
         private final BFS bfs;
         private final int s;
@@ -26,12 +25,12 @@ public class RequestHandlerConc extends RequestHandler {
         }
     }
 
-    public RequestHandlerConc(Graph graph) {
+    public RequestHandlerConcurrent(Graph graph) {
         super(graph);
     }
 
     @Override
-    public int[] computeBatch(List<String[]> reqSeq, int numQueries) throws InterruptedException {
+    public synchronized int[] computeBatch(List<String[]> reqSeq, int numQueries) throws InterruptedException {
         long start = System.nanoTime();
 
         int num_req = reqSeq.size();

@@ -1,20 +1,18 @@
 package client;
 
-import rmi.GraphIF;
+import org.apache.log4j.Logger;
+import server.GraphIF;
 import server.RMIServer;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Properties;
 
 public class RMIClient {
+    private static final Logger logger = Logger.getLogger(RMIClient.class.getName());
     public static GraphIF init() {
         try {
             // Load properties
@@ -24,7 +22,7 @@ public class RMIClient {
 
             int port = Integer.parseInt(properties.getProperty("GSP.rmiRegistry.port", "1099"));
             String remoteObjectName = properties.getProperty("GSP.rmiRegistry.remoteObjectName", "RMIServer");
-            System.out.println("Connecting to port " + port + " with remote object name " + remoteObjectName);
+            logger.info("Connecting to port " + port + " with remote object name " + remoteObjectName);
 
             // Get a reference to the remote object Registry for the localhost on the specified port.
             Registry registry = LocateRegistry.getRegistry(port);

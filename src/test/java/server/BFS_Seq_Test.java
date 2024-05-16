@@ -12,7 +12,7 @@ class BFS_Seq_Test {
     @BeforeAll
     static void beforeAll() {
         Graph graph = new Graph();
-        requestHandler = new RequestHandlerSeq(graph);
+        requestHandler = new RequestHandlerSequential(graph);
     }
 
     @Test
