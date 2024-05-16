@@ -2,14 +2,14 @@ package server;
 
 import java.util.List;
 
-public class RequestHandlerSeq extends RequestHandler {
+public class RequestHandlerSequential extends RequestHandler {
 
-    public RequestHandlerSeq(Graph graph) {
+    public RequestHandlerSequential(Graph graph) {
         super(graph);
     }
 
     @Override
-    public int[] computeBatch(List<String[]> reqSeq, int numQueries) {
+    public synchronized int[] computeBatch(List<String[]> reqSeq, int numQueries) {
         long start = System.nanoTime();
 
         int[] results = new int[numQueries];

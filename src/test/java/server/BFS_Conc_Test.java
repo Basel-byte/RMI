@@ -11,7 +11,7 @@ class BFS_Conc_Test {
     @BeforeAll
     static void beforeAll() {
         Graph graph = new Graph();
-        requestHandler = new RequestHandlerConc(graph);
+        requestHandler = new RequestHandlerConcurrent(graph);
     }
 
     @Test

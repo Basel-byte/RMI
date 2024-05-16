@@ -1,4 +1,4 @@
-package rmi;
+package server;
 
 import java.util.List;
 
