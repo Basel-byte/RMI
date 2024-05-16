@@ -76,7 +76,6 @@ public class SSHExecutor {
             java.util.Properties config = new java.util.Properties();
             config.put("StrictHostKeyChecking", "no");
             session.setConfig(config);
-
             session.setPassword(password);
             session.connect();
 
