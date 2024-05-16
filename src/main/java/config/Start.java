@@ -21,8 +21,10 @@ public class Start {
             int serverPort = Integer.parseInt(systemProps.getProperty("GSP.server.port"));
             System.out.println("Server port: " + serverPort);
             String username = systemProps.getProperty("GSP.username");
+            System.out.println("Username: " + username);
             int numberOfNodes = systemProps.getProperty("GSP.numberOfnodes") == null ? 0 : Integer.parseInt(systemProps.getProperty("GSP.numberOfnodes"));
             String password = systemProps.getProperty("GSP.password");
+            System.out.println("Password: " + password);
             SSHExecutor sshExecutor = new SSHExecutor();
             // Create a CountDownLatch with a count of 1
             CountDownLatch latch = new CountDownLatch(1);
