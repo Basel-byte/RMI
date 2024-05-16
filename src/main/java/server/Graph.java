@@ -17,8 +17,7 @@ public class Graph {
     }
 
     private void instantiate() {
-        ClassLoader classLoader = getClass().getClassLoader();
-        InputStream inputStream = classLoader.getResourceAsStream("input/initialGraph");
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("input/initialGraph");
         if (inputStream != null) {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 String line;
