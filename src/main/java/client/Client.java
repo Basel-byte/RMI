@@ -18,7 +18,8 @@ public class Client {
 
         while (true) {
             // Prepare a test batch
-            List<String[]> batch = Parser.prepareRequests("input/batch1");
+            int batchNumber = new Random().nextInt(6) + 1;
+            List<String[]> batch = Parser.prepareRequests("input/test/batch" + batchNumber);
             int numQueries = Parser.getNumQueries();
 
             logger.info("Sent!");
@@ -35,6 +36,8 @@ public class Client {
             logger.info("Elapsed time: " + elapsedTime + " milliseconds");
 
             logger.info("Received: " + Arrays.toString(result));
+
+            Parser.writeResultToFile("" + batchNumber, result);
 
             // Random sleep between 1 and 5 seconds before next request
             Random random = new Random();

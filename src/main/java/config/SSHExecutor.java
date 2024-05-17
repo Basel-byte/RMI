@@ -44,6 +44,7 @@ public class SSHExecutor {
                 if(commandOutputStarted) {
                     System.out.print(data);
                 }
+
                 if (!commandOutputStarted && data.contains("$")) {
                     commandOutputStarted = true;
                     latch.countDown();
