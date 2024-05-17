@@ -7,55 +7,74 @@ import java.util.concurrent.CountDownLatch;
 
 public class Start {
 
-    public static void main(String[] args) {
-        try {
-            // Load system properties from file
-            Properties systemProps = new Properties();
-            InputStream in = Start.class.getClassLoader().getResourceAsStream("system.properties");
-            systemProps.load(in);
-            in.close();
-
-            // Read properties
-            String serverAddress = systemProps.getProperty("GSP.server");
-            System.out.println("Server address: " + serverAddress);
-            int serverPort = Integer.parseInt(systemProps.getProperty("GSP.server.port"));
-            System.out.println("Server port: " + serverPort);
-            String username = systemProps.getProperty("GSP.username");
-            System.out.println("Username: " + username);
-            int numberOfNodes = systemProps.getProperty("GSP.numberOfnodes") == null ? 0 : Integer.parseInt(systemProps.getProperty("GSP.numberOfnodes"));
-            String password = systemProps.getProperty("GSP.password");
-            System.out.println("Password: " + password);
-            SSHExecutor sshExecutor = new SSHExecutor();
-            // Create a CountDownLatch with a count of 1
-            CountDownLatch latch = new CountDownLatch(1);
-            String systemPath = System.getProperty("user.dir");
-            System.out.println(systemPath);
-            Thread serverThread = new Thread(() -> sshExecutor.executeSingleCommand(username, serverAddress, password, "java -jar "+ systemPath +"/out/artifacts/server_jar/RMI.jar", latch));
-            serverThread.start();
-            latch.await();
-            System.out.println("Server started");
-            System.out.println("number of nodes: " + numberOfNodes);
-
-
-            // Start clients
-            for (int i = 0; i < numberOfNodes; i++) {
-                int index = i;
-                System.out.println("Start client " + index);
-                Thread clientThread = new Thread(() -> {
-                    String clientHost = systemProps.getProperty("GSP.node" + index);
-                    System.out.println("Start client " + index + " on " + clientHost);
-                    sshExecutor.executeSingleCommand(username, clientHost, password, "java -jar "+ systemPath + "/out/artifacts/client_jar/RMI.jar", latch);
-                });
-                clientThread.start();
+    private static Properties loadProperties(String fileName) {
+        Properties properties = new Properties();
+        try (InputStream in = Start.class.getClassLoader().getResourceAsStream(fileName)) {
+            if (in == null) {
+                throw new IOException(fileName + " file not found");
             }
-
-
+            properties.load(in);
         } catch (IOException e) {
-            System.err.println("Error loading system properties: " + e.getMessage());
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.err.println("Error loading properties: " + e.getMessage());
+            return null;
         }
+        return properties;
     }
 
+    private static void startServer(SSHExecutor sshExecutor, String username, String serverAddress, String password, String systemPath, CountDownLatch latch) {
+        Thread serverThread = new Thread(() -> {
+            sshExecutor.executeSingleCommand(username, serverAddress, password, "java -jar " + systemPath + "/out/artifacts/server_jar/RMI.jar", latch);
+        });
+        serverThread.start();
+    }
 
+    private static void startClients(SSHExecutor sshExecutor, String username, String password, String systemPath, int numberOfNodes, Properties systemProps, CountDownLatch latch) {
+        for (int i = 0; i < numberOfNodes; i++) {
+            int index = i;
+            String clientHost = systemProps.getProperty("GSP.node" + index);
+            Thread clientThread = new Thread(() -> {
+                System.out.println("Start client " + index + " on " + clientHost);
+                sshExecutor.executeSingleCommand(username, clientHost, password, "java -jar " + systemPath + "/out/artifacts/client_jar/RMI.jar", latch);
+            });
+            clientThread.start();
+        }
+    }
+    public static void main(String[] args) {
+        Properties systemProps = loadProperties("system.properties");
+        if (systemProps == null) {
+            return;
+        }
+
+        String serverAddress = systemProps.getProperty("GSP.server");
+        int serverPort = Integer.parseInt(systemProps.getProperty("GSP.server.port", "0"));
+        String username = systemProps.getProperty("GSP.username");
+        int numberOfNodes = Integer.parseInt(systemProps.getProperty("GSP.numberOfnodes", "0"));
+        String password = systemProps.getProperty("GSP.password");
+
+        System.out.println("Server address: " + serverAddress);
+        System.out.println("Server port: " + serverPort);
+        System.out.println("Username: " + username);
+        System.out.println("Password: " + password);
+
+        CountDownLatch latch = new CountDownLatch(1);
+        String systemPath = System.getProperty("user.dir");
+        System.out.println(systemPath);
+
+        SSHExecutor sshExecutor = new SSHExecutor();
+
+        startServer(sshExecutor, username, serverAddress, password, systemPath, latch);
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            System.err.println("Latch interrupted: " + e.getMessage());
+            return;
+        }
+
+        System.out.println("Server started");
+        System.out.println("Number of nodes: " + numberOfNodes);
+
+        startClients(sshExecutor, username, password, systemPath, numberOfNodes, systemProps, latch);
+    }
 }

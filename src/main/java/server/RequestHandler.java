@@ -10,5 +10,5 @@ public abstract class RequestHandler {
         this.graph = graph;
         bfs = new BFS(this.graph);
     }
-    public abstract int[] computeBatch(List<String[]> reqSeq, int numQueries) throws InterruptedException;
+    public abstract int[] computeBatch(List<String[]> reqSeq, int numQueries);
 }

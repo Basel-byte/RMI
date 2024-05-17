@@ -1,10 +1,11 @@
 package server;
 
+import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Arrays;
 import java.util.List;
 
-public class GraphObject extends UnicastRemoteObject implements GraphIF {
+public class GraphObject extends UnicastRemoteObject implements GraphRemoteIF {
 
     Graph graph;
     RequestHandler requestHandler;
@@ -15,7 +16,7 @@ public class GraphObject extends UnicastRemoteObject implements GraphIF {
     }
 
     @Override
-    public int[] batchRequest(List<String[]> batch, int noQueries) throws java.rmi.RemoteException, InterruptedException {
+    public int[] batchRequest(List<String[]> batch, int noQueries) throws RemoteException {
         System.out.println("Received: ");
         batch.forEach((r) -> System.out.println(Arrays.toString(r)));
 

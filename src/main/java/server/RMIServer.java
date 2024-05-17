@@ -30,7 +30,7 @@ public class RMIServer {
             GraphObject graphObject = new GraphObject(concurrent);
             registry.bind(remoteObjectName, graphObject);
 
-            logger.info("Server is listening on port " + port + " with remote object name " + remoteObjectName);
+            logger.info("RMIServer is listening on port " + port + " with remote object name " + remoteObjectName);
         }
         catch (Exception e) {
             throw new RuntimeException(e);

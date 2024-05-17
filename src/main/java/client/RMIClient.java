@@ -1,7 +1,7 @@
 package client;
 
 import org.apache.log4j.Logger;
-import server.GraphIF;
+import server.GraphRemoteIF;
 import server.RMIServer;
 
 import java.io.IOException;
@@ -13,7 +13,7 @@ import java.util.Properties;
 
 public class RMIClient {
     private static final Logger logger = Logger.getLogger(RMIClient.class.getName());
-    public static GraphIF init() {
+    public static GraphRemoteIF init() {
         try {
             // Load properties
             InputStream is = RMIServer.class.getClassLoader().getResourceAsStream("system.properties");
@@ -27,7 +27,7 @@ public class RMIClient {
             // Get a reference to the remote object Registry for the localhost on the specified port.
             Registry registry = LocateRegistry.getRegistry(port);
 
-            return (GraphIF) registry.lookup(remoteObjectName);
+            return (GraphRemoteIF) registry.lookup(remoteObjectName);
         }
         catch (NotBoundException | IOException e) {
             throw new RuntimeException(e);
