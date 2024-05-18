@@ -2,6 +2,7 @@ package config;
 
 import org.apache.log4j.Logger;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -13,10 +14,8 @@ public class Start {
 
     private static Properties loadProperties() {
         Properties properties = new Properties();
-        try (InputStream in = Start.class.getClassLoader().getResourceAsStream("system.properties")) {
-            if (in == null) {
-                throw new IOException("system.properties" + " file not found");
-            }
+        try (InputStream in = new FileInputStream("/home/amr/RMI/RMI/src/main/resources/system.properties")) {
+            
             properties.load(in);
         } catch (IOException e) {
             logger.error("Error loading properties: " + e.getMessage());
@@ -38,7 +37,7 @@ public class Start {
             String clientHost = systemProps.getProperty("GSP.node" + index);
             Thread clientThread = new Thread(() -> {
                 logger.info("Starting client " + index + " on " + clientHost);
-                sshExecutor.executeSingleCommand(username, clientHost, password, "java -jar " + systemPath + "/out/artifacts/client_jar/RMI.jar", latch);
+                sshExecutor.executeSingleCommand(username, clientHost, password, "java -jar " + systemPath + "/out/artifacts/client_jar/RMI.jar " + index, latch);
             });
             clientThread.start();
         }

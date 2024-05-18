@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 public class Utils {
 
@@ -48,6 +49,39 @@ public class Utils {
             logger.error("Initial batch file not found!");
         }
         return reqSeq;
+    }
+
+    public static List<String> generateRandomBatch(double writePercentage, int numOfOperations) {
+        Random random = new Random();
+
+        if(numOfOperations == -1) {
+            numOfOperations = random.nextInt(1000);
+        }
+        List<String> batch = new ArrayList<>();
+
+        for (int i = 0; i < numOfOperations; i++) {
+            String operationType = random.nextFloat() > writePercentage ? "Q" : random.nextFloat() < 0.5 ? "A" : "D";
+            String parameters = generateParameters(operationType);
+            batch.add(parameters);
+        }
+        return batch;
+    }
+
+    // Function to generate parameters based on operationType
+    private static String generateParameters(String operationType) {
+        Random random = new Random();
+        int a = random.nextInt(100);
+        int b = random.nextInt(100);
+        switch (operationType) {
+            case "A":
+                return "A " + String.valueOf(a) + " "  + String.valueOf(b);
+            case "Q":
+                return "Q " + String.valueOf(a) + " "  + String.valueOf(b);
+            case "D":
+                return "D " + String.valueOf(a) + " "  + String.valueOf(b);
+            default:
+                throw new IllegalArgumentException("Invalid operation type: " + operationType);
+        }
     }
 
     public static List<String[]> prepareRequests(List<String> batch) {
