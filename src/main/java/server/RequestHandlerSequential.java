@@ -1,8 +1,11 @@
 package server;
 
+import org.apache.log4j.Logger;
+
 import java.util.List;
 
 public class RequestHandlerSequential extends RequestHandler {
+    private static final Logger logger = Logger.getLogger(RequestHandlerSequential.class.getName());
 
     public RequestHandlerSequential(Graph graph) {
         super(graph);
@@ -26,7 +29,7 @@ public class RequestHandlerSequential extends RequestHandler {
             }
         }
 
-        System.out.println("Sequential: Time taken in Nano sec is "+(System.nanoTime()-start));
+        logger.info("Sequential: Time taken in Nano sec is "+(System.nanoTime()-start));
 
         return results;
     }

@@ -1,8 +1,12 @@
 package server;
 
+import org.apache.log4j.Logger;
+
 import java.util.List;
 
 public class RequestHandlerConcurrent extends RequestHandler {
+    private static final Logger logger = Logger.getLogger(RequestHandlerConcurrent.class.getName());
+
     static class BFS_C implements Runnable {
         private final BFS bfs;
         private final int s;
@@ -62,14 +66,18 @@ public class RequestHandlerConcurrent extends RequestHandler {
                 }
             }
         }
+<<<<<<< Updated upstream
 
         for(int j=start_join_idx; j<i; j++){
             thread[j].join();
 
+=======
+        catch (InterruptedException e) {
+            logger.error("Error in thread join: " + e.getMessage());
+>>>>>>> Stashed changes
         }
 
-        System.out.println("Concurrent: Time taken in Nano sec is "+(System.nanoTime()-start));
-
+        logger.info("Concurrent: Time taken in Nano sec is "+(System.nanoTime()-start));
         return results;
     }
 }

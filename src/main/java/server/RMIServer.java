@@ -1,8 +1,6 @@
 package server;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
-
 import java.io.InputStream;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -12,7 +10,6 @@ public class RMIServer {
     private static final Logger logger = Logger.getLogger(RMIServer.class.getName());
 
     public static void main(String[] args) {
-        setupLogger();
         try {
             // Load properties
             InputStream is = RMIServer.class.getClassLoader().getResourceAsStream("system.properties");
@@ -29,16 +26,16 @@ public class RMIServer {
             // Registering a name for the remote object
             GraphObject graphObject = new GraphObject(concurrent);
             registry.bind(remoteObjectName, graphObject);
+<<<<<<< Updated upstream
 
             logger.info("Server is listening on port " + port + " with remote object name " + remoteObjectName);
+=======
+            System.out.println("Graph initialized successfully!");
+            logger.info("RMIServer is listening on port " + port + " with remote object name " + remoteObjectName);
+>>>>>>> Stashed changes
         }
         catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public static void setupLogger() {
-        // Set up logger
-        PropertyConfigurator.configure(RMIServer.class.getClassLoader().getResource("server.log4j.properties"));
     }
 }
