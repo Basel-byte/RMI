@@ -1,7 +1,3 @@
 Manifest-Version: 1.0
-<<<<<<< Updated upstream
-Main-Class: client.Client
-=======
 Main-Class: config.Start
->>>>>>> Stashed changes
 

@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import server.GraphIF;
 
 import java.io.IOException;
+import java.rmi.NotBoundException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;

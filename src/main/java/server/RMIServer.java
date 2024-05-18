@@ -26,13 +26,8 @@ public class RMIServer {
             // Registering a name for the remote object
             GraphObject graphObject = new GraphObject(concurrent);
             registry.bind(remoteObjectName, graphObject);
-<<<<<<< Updated upstream
-
-            logger.info("Server is listening on port " + port + " with remote object name " + remoteObjectName);
-=======
             System.out.println("Graph initialized successfully!");
             logger.info("RMIServer is listening on port " + port + " with remote object name " + remoteObjectName);
->>>>>>> Stashed changes
         }
         catch (Exception e) {
             throw new RuntimeException(e);

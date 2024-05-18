@@ -66,18 +66,12 @@ public class RequestHandlerConcurrent extends RequestHandler {
                 }
             }
         }
-<<<<<<< Updated upstream
 
-        for(int j=start_join_idx; j<i; j++){
+        for(int j=start_join_idx; j<i; j++) {
             thread[j].join();
-
-=======
-        catch (InterruptedException e) {
-            logger.error("Error in thread join: " + e.getMessage());
->>>>>>> Stashed changes
         }
-
         logger.info("Concurrent: Time taken in Nano sec is "+(System.nanoTime()-start));
         return results;
     }
 }
+
